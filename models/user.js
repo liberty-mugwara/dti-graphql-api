@@ -334,5 +334,5 @@ UserSchema.statics = {
     });
   },
 };
-exports.UserSchema = UserSchema;
+
 module.exports = model('User', UserSchema);

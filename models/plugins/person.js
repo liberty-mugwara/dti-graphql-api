@@ -9,6 +9,7 @@ const DeletedPerson = require('../deleted-person');
 
 const { titles, sex } = require('../../constants/people');
 const { addOrUpdateOwned, updateTradeOrRole } = require('../helpers');
+const { lowerFirstChar } = require('../../helpers/strings');
 const { isAPIError } = require('../../helpers/errors');
 const { isCastError } = require('../../helpers/mongoose');
 
@@ -85,6 +86,7 @@ module.exports = function personPlugin(schema, { role, trade } = {}) {
 
       try {
         const {
+          UserModel,
           trade,
           role,
           nextOfKin: nextOfKinData,
@@ -131,11 +133,28 @@ module.exports = function personPlugin(schema, { role, trade } = {}) {
         if (address) allowedCreateData.address = address._id;
         if (nextOfKin) allowedCreateData.nextOfKin = nextOfKin._id;
 
-        const person = await PersonModel.createDocument(allowedCreateData);
+        const [person, user] = Promise.all([
+          // create person
+          PersonModel.createDocument(allowedCreateData),
+          // check if user with the same national id is already created
+          UserModel.findOne({ nationalId: createData.nationalId }),
+        ]);
+
+        if (user) {
+          // link user to person
+          person.$set('user', user?._id);
+          // link person to user
+          user.set(
+            'profiles.' + lowerFirstChar(PersonModel.modelName),
+            person._id
+          );
+        }
 
         await Promise.all([
           address?.addOwner(person),
           nextOfKin?.addOwner(person),
+          person.save(),
+          user?.save(),
         ]);
         return person;
       } catch (e) {

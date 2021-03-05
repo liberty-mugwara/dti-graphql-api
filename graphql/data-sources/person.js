@@ -1,4 +1,5 @@
 const { MugsMongoDataSource } = require('./mugs-mongo');
+const { User } = require('../../models');
 
 module.exports = class extends MugsMongoDataSource {
   async update(
@@ -22,7 +23,10 @@ module.exports = class extends MugsMongoDataSource {
     this.authorize(auth);
     return await this.populateDocument(
       this.getPopulateDataFromInfo(resolversInfo, level),
-      await this.model.createPerson(this.formatCreateData(createData))
+      await this.model.createPerson({
+        ...this.formatCreateData(createData),
+        UserModel: User,
+      })
     );
   }
 };
