@@ -64,23 +64,23 @@ const trainingOfficerResolvers = {
 
 const trainingOfficerTypes = gql`
   type TrainingOfficer {
-    role: Role!
+    trade: Trade!
     ${personType}
   }
 
   input UpdateTrainingOfficer {
     ${updatePersonType}
-    role: ID
+    trade: ID
   }
 
   input CreateTrainingOfficer {
     ${createPersonType}
-    role: ID!
+    trade: ID!
   }
 
   input TrainingOfficerCount  {
     ${countPersonType}
-    role: ID
+    trade: ID
   }
 
   extend type Query {
