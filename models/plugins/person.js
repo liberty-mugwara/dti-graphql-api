@@ -111,11 +111,11 @@ module.exports = function personPlugin(schema, { role, trade } = {}) {
         // validate input
         await Promise.all([
           PersonModel.validate({ ...allowedCreateData, trade, role }),
-          PersonModel.preventMongo11000({
-            nationalId: createData.nationalId,
-            email: createData.email,
-            phoneNumber: createData.phoneNumber,
-          }),
+          PersonModel.preventMongo11000(allowedCreateData, [
+            'nationalId',
+            'phoneNumber',
+            'email',
+          ]),
         ]);
 
         const promises = [];
