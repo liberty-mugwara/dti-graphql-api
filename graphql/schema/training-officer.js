@@ -54,7 +54,7 @@ const trainingOfficerResolvers = {
       });
     },
 
-    async removeTrainingOfficer(_, { id }, { dataSources }, resolversInfo) {
+    async deleteTrainingOfficer(_, { id }, { dataSources }, resolversInfo) {
       return dataSources.TrainingOfficer.delete(id, {
         auth: { resolversInfo, requiredRoles: ['manager'] },
       });
@@ -94,7 +94,7 @@ const trainingOfficerTypes = gql`
   extend type Mutation{
     updateTrainingOfficer(input: UpdateTrainingOfficer): TrainingOfficer!
     createTrainingOfficer(input: CreateTrainingOfficer): TrainingOfficer!
-    removeTrainingOfficer(id: ID!): TrainingOfficer!
+    deleteTrainingOfficer(id: ID!): TrainingOfficer!
   }
 `;
 

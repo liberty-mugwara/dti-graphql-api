@@ -54,7 +54,7 @@ const studentResolvers = {
       });
     },
 
-    async removeStudent(_, { id }, { dataSources }, resolversInfo) {
+    async deleteStudent(_, { id }, { dataSources }, resolversInfo) {
       return dataSources.Student.delete(id, {
         auth: { resolversInfo, requiredRoles: ['manager'] },
       });
@@ -64,23 +64,23 @@ const studentResolvers = {
 
 const studentTypes = gql`
   type Student {
-    role: Role!
+    trade: Role!
     ${personType}
   }
 
   input UpdateStudent {
     ${updatePersonType}
-    role: ID
+    trade: ID
   }
 
   input CreateStudent {
     ${createPersonType}
-    role: ID!
+    trade: ID!
   }
 
   input StudentCount  {
     ${countPersonType}
-    role: ID
+    trade: ID
   }
 
   extend type Query {
@@ -94,7 +94,7 @@ const studentTypes = gql`
   extend type Mutation{
     updateStudent(input: UpdateStudent): Student!
     createStudent(input: CreateStudent): Student!
-    removeStudent(id: ID!): Student!
+    deleteStudent(id: ID!): Student!
   }
 `;
 
