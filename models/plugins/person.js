@@ -89,6 +89,7 @@ module.exports = function personPlugin(schema, { role, trade } = {}) {
           UserModel,
           trade,
           role,
+          RVC,
           nextOfKin: nextOfKinData,
           address: addressData,
           ...allowedCreateData
@@ -177,6 +178,8 @@ module.exports = function personPlugin(schema, { role, trade } = {}) {
       const PersonModel = this;
       try {
         PersonModel.checkAllowedUpdates(updateData, [
+          // RVC should not be in this list
+          // I'm happy you understand
           'address',
           'dob',
           'email',
@@ -243,7 +246,7 @@ module.exports = function personPlugin(schema, { role, trade } = {}) {
             'email',
             'nationalId',
           ];
-          for (const [key, value] in Object.entries(allowedUpdateData)) {
+          for (const [key, value] of Object.entries(allowedUpdateData)) {
             if (allowedKeys.includes(key)) {
               updateUser = true;
               userUpdateData[key] = value;
