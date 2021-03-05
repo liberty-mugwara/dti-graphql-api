@@ -133,7 +133,7 @@ module.exports = function personPlugin(schema, { role, trade } = {}) {
         if (address) allowedCreateData.address = address._id;
         if (nextOfKin) allowedCreateData.nextOfKin = nextOfKin._id;
 
-        const [person, user] = Promise.all([
+        const [person, user] = await Promise.all([
           // create person
           PersonModel.createDocument(allowedCreateData),
           // check if user with the same national id is already created
