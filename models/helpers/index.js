@@ -59,7 +59,8 @@ const addOrUpdateOwned = OwnedModel => {
       let owned;
 
       //   populate owned path
-      await owner.populate(ownedRefKey).execPopulate();
+      if (!owner.populated(ownedRefKey))
+        await owner.populate(ownedRefKey).execPopulate();
 
       // check if a new owned doc should be created or changed
       if (id && !idsMatch(id, owner[ownedRefKey]?._id)) {

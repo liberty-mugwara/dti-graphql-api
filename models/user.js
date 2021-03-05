@@ -188,12 +188,18 @@ UserSchema.methods = {
     return await this.execPopulate();
   },
   async removeProfile({ profile, user }) {
+    // removing removed profile linked scope
+    let scopeArr = user.scope.split(' ');
+    scopeArr = scopeArr.filter(
+      scope => scope !== lowerFirstChar(profile.getModelName())
+    );
     // remove the linked profile
     this.$set('profiles.' + lowerFirstChar(profile.getModelName()), undefined)
       // if profile is removed the role associated is set to false
       .$set('is' + profile.getModelName(), false)
-      .$set('modifiedBy', user);
+      .set({ modifiedBy: user, scope: scopeArr.join(' ') });
 
+    // NB: user is not actually deleted
     if (this.$isEmpty('profiles')) await this.deleteUser({ deletedBy: user });
     return await this.save();
   },

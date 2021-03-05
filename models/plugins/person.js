@@ -141,18 +141,14 @@ module.exports = function personPlugin(schema, { role, trade } = {}) {
         ]);
 
         if (user) {
+          const modelKey = lowerFirstChar(PersonModel.modelName);
           // link user to person
           person.$set('user', user?._id);
           // link person to user
           user
-            .$set(
-              'profiles.' + lowerFirstChar(PersonModel.modelName),
-              person._id
-            )
-            .$set(
-              'scope',
-              `${user.scope} ${lowerFirstChar(PersonModel.modelName)}`
-            );
+            .$set('profiles.' + modelKey, person._id)
+            .$set('scope', `${user.scope} ${modelKey}`)
+            .$set('is' + modelKey, true);
         }
 
         await Promise.all([
@@ -236,18 +232,57 @@ module.exports = function personPlugin(schema, { role, trade } = {}) {
 
         if (person.user) {
           await person.populate('user').execPopulate();
+          const userUpdateData = {};
+          let updateUser = false;
+          const allowedKeys = [
+            'sex',
+            'title',
+            'firstName',
+            'lastName',
+            'phoneNumber',
+            'email',
+            'nationalId',
+          ];
+          for (const [key, value] in Object.entries(allowedUpdateData)) {
+            if (allowedKeys.includes(key)) {
+              updateUser = true;
+              userUpdateData[key] = value;
+            }
+          }
           if (person.populated('user')) {
+            // update user
+            updateUser && (await person.user.set(userUpdateData).save());
+            // populate user
             await person.user
-              .set({
-                sex: person.sex,
-                title: person.title,
-                firstName: person.firstName,
-                lastName: person.lastName,
-                phoneNumber: person.phoneNumber,
-                email: person.email,
-                nationalId: person.nationalId,
+              .populate({
+                path: 'profiles',
+                populate: ['manager', 'admin', 'trainingOfficer', 'student'],
               })
-              .save();
+              .execPopulate();
+            // update other linked profiles
+            const profilePromises = [];
+            for (const [key, profile] of Object.entries(person.user.profiles)) {
+              if (
+                profile?.constructor?.modelName &&
+                !['$init', lowerFirstChar(PersonModel.modelName)].includes(key)
+              ) {
+                // set allowed updates
+                // NB: they exclude role and trade
+                profile.set(allowedUpdateData);
+                profilePromises.push(
+                  Promise.all([
+                    // save profile
+                    profile.save(),
+                    // if nextOfKin is updated
+                    addOrUpdateNextOfKin(profile, nextOfKin),
+                    // if address is updated
+                    addOrUpdateAddress(profile, address),
+                  ])
+                );
+              }
+            }
+            // execute the promises in ||
+            await Promise.all(profilePromises);
           }
         }
 
