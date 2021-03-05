@@ -2,15 +2,18 @@
 
 const { ApolloServer } = require('apollo-server-express');
 const app = require('../app');
-const typeDefs = require('../graphql/type-defs');
-const resolvers = require('../graphql/resolvers');
-const { formatGraphqlErrors: formatError } = require('../errors');
-const { setContext } = require('../graphql/auth');
+const {
+  resolvers,
+  typeDefs,
+  dataSources,
+  setContext,
+} = require('../base_database_app/app');
 
+const { formatGraphqlErrors: formatError } = require('../errors');
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  dataSources: () => require('../graphql/data-sources'),
+  dataSources: () => dataSources,
   formatError,
   context: setContext,
 });
