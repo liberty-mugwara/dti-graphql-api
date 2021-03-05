@@ -144,10 +144,15 @@ module.exports = function personPlugin(schema, { role, trade } = {}) {
           // link user to person
           person.$set('user', user?._id);
           // link person to user
-          user.set(
-            'profiles.' + lowerFirstChar(PersonModel.modelName),
-            person._id
-          );
+          user
+            .$set(
+              'profiles.' + lowerFirstChar(PersonModel.modelName),
+              person._id
+            )
+            .$set(
+              'scope',
+              `${user.scope} ${lowerFirstChar(PersonModel.modelName)}`
+            );
         }
 
         await Promise.all([
