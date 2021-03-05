@@ -15,7 +15,7 @@ const trainingOfficerResolvers = {
       });
     },
 
-    async trainingOfficer(_, __, { dataSources }, resolversInfo) {
+    async trainingOfficers(_, __, { dataSources }, resolversInfo) {
       return dataSources.TrainingOfficer.listAll({
         resolversInfo,
         auth: { requiredRoles: ['manager', 'admin'] },
