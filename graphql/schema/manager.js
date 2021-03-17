@@ -3,15 +3,15 @@ const {
   updatePersonType,
   createPersonType,
   countPersonType,
-} = require('./universal/person');
-const { gql } = require('apollo-server-express');
+} = require("./universal/person");
+const { gql } = require("apollo-server-express");
 
 const managerResolvers = {
   Query: {
     async manager(_, { id }, { dataSources }, resolversInfo) {
       return dataSources.Manager.getById(id, {
         resolversInfo,
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
 
@@ -19,23 +19,23 @@ const managerResolvers = {
       console.log(user, regUser);
       return dataSources.Manager.listAll({
         resolversInfo,
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
     async isManagerNationalIdAvailable(_, { nationalId }, { dataSources }) {
       return dataSources.Manager.isNationalIdAvailable(nationalId, {
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
     async isManagerEmailAvailable(_, { email }, { dataSources }) {
       return dataSources.Manager.isEmailAvailable(email, {
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
 
     async managersCount(_, { input }, { dataSources }) {
       return await dataSources.Manager.count(input, {
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
   },
@@ -44,20 +44,20 @@ const managerResolvers = {
     async updateManager(_, { input }, { dataSources }, resolversInfo) {
       return dataSources.Manager.update(input, {
         resolversInfo,
-        auth: { requiredRoles: ['manager'] },
+        auth: { requiredRoles: ["manager"] },
       });
     },
 
     async createManager(_, { input }, { dataSources }, resolversInfo) {
       return dataSources.Manager.create(input, {
         resolversInfo,
-        auth: { requiredRoles: ['manager'] },
+        auth: { requiredRoles: [] },
       });
     },
 
     async deleteManager(_, { id }, { dataSources }, resolversInfo) {
       return dataSources.Manager.delete(id, {
-        auth: { resolversInfo, requiredRoles: ['manager'] },
+        auth: { resolversInfo, requiredRoles: ["manager"] },
       });
     },
   },
