@@ -1,6 +1,6 @@
-const { gql } = require('apollo-server-express');
-const { objectType } = require('./universal/object');
-const { personType } = require('./universal/person');
+const { gql } = require("apollo-server-express");
+const { objectType } = require("./universal/object");
+const { personType } = require("./universal/person");
 
 /* QUERIES */
 const roleResolvers = {
@@ -8,57 +8,57 @@ const roleResolvers = {
     async role(_, { id }, { dataSources }, resolversInfo) {
       return await dataSources.Role.getById(id, {
         resolversInfo,
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
     async roles(_, __, { dataSources }, resolversInfo) {
       return await dataSources.Role.list({
         resolversInfo,
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
     async roleGetManagers(_, { id }, { dataSources }, resolversInfo) {
       return await dataSources.Role.getManagers(id, {
         resolversInfo,
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
     async roleCountManagers(_, { id }, { dataSources }, resolversInfo) {
       return await dataSources.Role.countManagers(id, {
         resolversInfo,
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
     async roleGetAdmins(_, { id }, { dataSources }, resolversInfo) {
       return await dataSources.Role.getAdmins(id, {
         resolversInfo,
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
 
     async roleCountAdmins(_, { id }, { dataSources }, resolversInfo) {
       return await dataSources.Role.countAdmins(id, {
         resolversInfo,
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
     async roleGetAllLinked(_, { id }, { dataSources }, resolversInfo) {
       return await dataSources.Role.getAllLinked(id, {
         resolversInfo,
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
 
     async roleCountAllLinked(_, { id }, { dataSources }, resolversInfo) {
       return await dataSources.Role.countAllLinked(id, {
         resolversInfo,
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
 
     async rolesCount(_, { input }, { dataSources }) {
       return await dataSources.Role.count(input, {
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
   },
@@ -69,7 +69,7 @@ const roleResolvers = {
         { name },
         {
           resolversInfo,
-          auth: { requiredRoles: ['manager', 'admin'] },
+          auth: { requiredRoles: ["manager", "admin"], allowAny: true },
         }
       );
     },
@@ -82,7 +82,7 @@ const roleResolvers = {
     ) {
       return await dataSources.Role.delete(id, roleToReplaceWithId, {
         resolversInfo,
-        auth: { requiredRoles: ['manager', 'admin'] },
+        auth: { requiredRoles: ["manager", "admin"] },
       });
     },
 
@@ -91,7 +91,7 @@ const roleResolvers = {
         { id, name },
         {
           resolversInfo,
-          auth: { requiredRoles: ['manager', 'admin'] },
+          auth: { requiredRoles: ["manager", "admin"] },
         }
       );
     },
