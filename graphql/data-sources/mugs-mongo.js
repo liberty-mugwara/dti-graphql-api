@@ -1,12 +1,12 @@
-const { DataSource } = require('apollo-datasource');
-const { APIGraphqlError, errorCodeMap } = require('../../errors');
-const { InMemoryLRUCache } = require('apollo-server-caching');
-const { User, DeletedObject } = require('./config').models;
+const { DataSource } = require("apollo-datasource");
+const { APIGraphqlError, errorCodeMap } = require("../../errors");
+const { InMemoryLRUCache } = require("apollo-server-caching");
+const { User, DeletedObject } = require("./config").models;
 
 exports.MugsMongoDataSource = class extends DataSource {
   constructor(mongooseModel) {
     super();
-    if (!mongooseModel) throw new Error('mongooseModel is required');
+    if (!mongooseModel) throw new Error("mongooseModel is required");
     this.model = mongooseModel;
     this.modelName = mongooseModel.modelName;
     this.User = User;
@@ -42,7 +42,7 @@ exports.MugsMongoDataSource = class extends DataSource {
     }
     throw new APIGraphqlError(
       errorCodeMap.get(401),
-      'You are not Authorized to access this resource'
+      "You are not Authorized to access this resource"
     );
   }
 
@@ -55,8 +55,8 @@ exports.MugsMongoDataSource = class extends DataSource {
         if (e.status === 404) {
           throw new APIGraphqlError(
             errorCodeMap.get(401),
-            'You are not Authorized to delete this resource because' +
-              ' your user account was deleted'
+            "You are not Authorized to delete this resource because" +
+              " your user account was deleted"
           );
         }
         throw e;
@@ -65,13 +65,13 @@ exports.MugsMongoDataSource = class extends DataSource {
   }
 
   formatCreateData(data = {}) {
-    if (!this.context.user?._id) {
-      throw new APIGraphqlError(
-        errorCodeMap.get(401),
-        'You are not Authorized to create documents'
-      );
-    }
-    data.createdBy = this.context.user._id;
+    // if (!this.context.user?._id) {
+    //   throw new APIGraphqlError(
+    //     errorCodeMap.get(401),
+    //     'You are not Authorized to create documents'
+    //   );
+    // }
+    // data.createdBy = this.context.user._id;
     return data;
   }
 
@@ -79,7 +79,7 @@ exports.MugsMongoDataSource = class extends DataSource {
     if (!this.context.user?._id) {
       throw new APIGraphqlError(
         errorCodeMap.get(401),
-        'You are not Authorized to create documents'
+        "You are not Authorized to create documents"
       );
     }
     data.modifiedBy = this.context.user._id;
@@ -88,18 +88,18 @@ exports.MugsMongoDataSource = class extends DataSource {
 
   getPopulateData(info, ttl, level = 0) {
     const populateProfilesData = [
-      'address',
-      'modifiedBy',
-      'createdBy',
-      'trade',
-      'role',
-      { path: 'nextOfKin', populate: 'address' },
+      "address",
+      "modifiedBy",
+      "createdBy",
+      "trade",
+      "role",
+      { path: "nextOfKin", populate: "address" },
     ];
 
     const populateUserData = [
       {
-        path: 'profiles',
-        populate: ['manager', 'admin', 'trainingOfficer', 'student'].map(
+        path: "profiles",
+        populate: ["manager", "admin", "trainingOfficer", "student"].map(
           path => ({
             path,
             populate: populateProfilesData,
@@ -109,7 +109,7 @@ exports.MugsMongoDataSource = class extends DataSource {
     ];
     const populatePersonData = [
       ...populateProfilesData,
-      { path: 'user', populate: populateUserData },
+      { path: "user", populate: populateUserData },
     ];
 
     const fullPopulateData = {
@@ -122,7 +122,7 @@ exports.MugsMongoDataSource = class extends DataSource {
 
     if (ttl) {
       return (
-        fullPopulateData[this.model.modelName] || ['modifiedBy', 'createdBy']
+        fullPopulateData[this.model.modelName] || ["modifiedBy", "createdBy"]
       );
     } else return this.getPopulateDataFromInfo(info, level);
   }
@@ -136,7 +136,7 @@ exports.MugsMongoDataSource = class extends DataSource {
           path: data.name.value,
           populate: data.selectionSet.selections
             .map(getNested)
-            .filter(value => typeof value === 'object')
+            .filter(value => typeof value === "object")
             .flat(),
         });
       } else name = data.name.value;
@@ -152,7 +152,7 @@ exports.MugsMongoDataSource = class extends DataSource {
             selection.name.value
           ] = selection.selectionSet.selections
             .map(getNested)
-            .filter(value => typeof value === 'object');
+            .filter(value => typeof value === "object");
         }
         return selection.name.value;
       })
