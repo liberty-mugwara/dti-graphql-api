@@ -1,11 +1,11 @@
-const { gql } = require('apollo-server-express');
-const { APIGraphqlError, errorCodeMap } = require('../../errors');
+const { gql } = require("apollo-server-express");
+const { APIGraphqlError, errorCodeMap } = require("../../errors");
 const {
   generateRegToken,
   generateAccessToken,
   validateRegTokenData,
-} = require('../auth');
-const { User } = require('../data-sources/config').models;
+} = require("../auth");
+const { User } = require("../data-sources");
 
 // REGISTRATION
 const userExists = async ({ nationalId, throwError = false } = {}) => {
@@ -16,7 +16,7 @@ const userExists = async ({ nationalId, throwError = false } = {}) => {
   if (throwError && exists) {
     throw new APIGraphqlError(
       errorCodeMap.get(403),
-      'You are already registered go on and login'
+      "You are already registered go on and login"
     );
   }
   return exists;
@@ -37,7 +37,7 @@ const registrationResolvers = {
       if (!profile) {
         throw new APIGraphqlError(
           errorCodeMap.get(404),
-          'The provided national id is not associated with any account.'
+          "The provided national id is not associated with any account."
         );
       }
 
@@ -69,7 +69,7 @@ const registrationResolvers = {
       if (isVerified) {
         throw new APIGraphqlError(
           errorCodeMap.get(403),
-          'You are already verified go on and enter your credentials'
+          "You are already verified go on and enter your credentials"
         );
       }
 
@@ -81,14 +81,14 @@ const registrationResolvers = {
       if (!firstName && !lastName && !RVC) {
         throw new APIGraphqlError(
           errorCodeMap.get(404),
-          'Profile not found. It might have been deleted.' +
-            ' Restarting the registration process might help.'
+          "Profile not found. It might have been deleted." +
+            " Restarting the registration process might help."
         );
       }
 
       //   check if rvc is correct
       if (RVC !== providedRVC.trim())
-        throw new APIGraphqlError(errorCodeMap.get(400), 'Invalid RVC!');
+        throw new APIGraphqlError(errorCodeMap.get(400), "Invalid RVC!");
 
       // generate registrationToken
       const token = generateRegToken(profile, _id, nationalId, true);
@@ -112,7 +112,7 @@ const registrationResolvers = {
       if (!isVerified) {
         throw new APIGraphqlError(
           errorCodeMap.get(403),
-          'You are not verified!'
+          "You are not verified!"
         );
       }
 
@@ -122,7 +122,7 @@ const registrationResolvers = {
       if (password !== password2)
         throw new APIGraphqlError(
           errorCodeMap.get(400),
-          'Passwords do not match'
+          "Passwords do not match"
         );
 
       const newUser = await dataSources.User.model
@@ -134,8 +134,8 @@ const registrationResolvers = {
           if (e?.code === 404) {
             throw new APIGraphqlError(
               errorCodeMap.get(404),
-              'Profile not found. It might have been deleted.' +
-                ' Restarting the registration process might help.'
+              "Profile not found. It might have been deleted." +
+                " Restarting the registration process might help."
             );
           }
           throw e;

@@ -65,13 +65,13 @@ exports.MugsMongoDataSource = class extends DataSource {
   }
 
   formatCreateData(data = {}) {
-    // if (!this.context.user?._id) {
-    //   throw new APIGraphqlError(
-    //     errorCodeMap.get(401),
-    //     'You are not Authorized to create documents'
-    //   );
-    // }
-    // data.createdBy = this.context.user._id;
+    if (!this.context.user?._id) {
+      throw new APIGraphqlError(
+        errorCodeMap.get(401),
+        "You are not Authorized to create documents"
+      );
+    }
+    data.createdBy = this.context.user._id;
     return data;
   }
 

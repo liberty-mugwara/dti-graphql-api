@@ -69,7 +69,7 @@ const roleResolvers = {
         { name },
         {
           resolversInfo,
-          auth: { requiredRoles: ["manager", "admin"], allowAny: true },
+          auth: { requiredRoles: ["manager", "admin"] },
         }
       );
     },

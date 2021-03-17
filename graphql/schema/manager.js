@@ -51,7 +51,7 @@ const managerResolvers = {
     async createManager(_, { input }, { dataSources }, resolversInfo) {
       return dataSources.Manager.create(input, {
         resolversInfo,
-        auth: { requiredRoles: ["manager"], allowAny: true },
+        auth: { requiredRoles: ["manager"] },
       });
     },
 
