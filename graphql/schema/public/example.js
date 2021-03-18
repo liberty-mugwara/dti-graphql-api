@@ -34,7 +34,7 @@ const exampleResolvers = {
     },
 
     async updateExample(_, { id, name }, { dataSources }) {
-      return await dataSources.Role.update({ id, name });
+      return await dataSources.Example.update({ id, name });
     },
   },
 };
