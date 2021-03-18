@@ -23,16 +23,11 @@ exports.Example = class extends MugsMongoDataSource {
     return example;
   }
 
-  async update(
-    { id, ...updateData } = {},
-    { allowedUpdates = ["name"], mongo11000Keys = ["name"] } = {}
-  ) {
-    const updated = await this.model.updateDocument({
-      id,
-      updateData: updateData,
-      mongo11000Keys,
-      allowedUpdates,
-    });
+  async update({ id, ...updateData } = {}) {
+    const [_, updated] = await Promise.all([
+      this.getRaw(id, { authorize: false }),
+      this.model.updateOne({ _id: id }, { ...updateData }),
+    ]);
 
     this.cache.delete(this.getCacheKey(id));
 
