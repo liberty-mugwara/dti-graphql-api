@@ -10,7 +10,8 @@ const {
   NextOfKin,
   DeletedObject,
   DeletedPerson,
-} = require('../../models');
+  Example,
+} = require("../../models");
 
 // ------- configuring user Model ------ //
 
@@ -34,27 +35,28 @@ const modelsData = {
   otherBin: DeletedObject,
   // for counting specific types of things deleted
   modelKeys: [
-    'Manager',
-    'Admin',
-    'Student',
-    'TrainingOfficer',
-    'Staff',
-    'Trade',
-    'Role',
-    'Address',
-    'NextOfKin',
+    "Manager",
+    "Admin",
+    "Student",
+    "TrainingOfficer",
+    "Staff",
+    "Trade",
+    "Role",
+    "Address",
+    "NextOfKin",
   ],
   // ---- required: END ---- //
 
   // for user actions counts
   PEOPLE,
   OTHER,
-  Manager: Manager,
-  Admin: Admin,
-  TrainingOfficer: TrainingOfficer,
-  Student: Student,
-  Trade: Trade,
-  Role: Role,
+  Manager,
+  Admin,
+  TrainingOfficer,
+  Student,
+  Trade,
+  Role,
+  Example,
 };
 
 module.exports = {
@@ -70,5 +72,6 @@ module.exports = {
     Role,
     Address,
     NextOfKin,
+    Example,
   },
 };

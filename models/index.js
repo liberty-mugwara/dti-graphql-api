@@ -10,4 +10,6 @@ module.exports = {
   Trade: require("./utils/trade"),
   DeletedPerson: require("./trash/deleted-person"),
   DeletedObject: require("./trash/deleted-object"),
+  // for testing purposes
+  Example: require("./public/example"),
 };

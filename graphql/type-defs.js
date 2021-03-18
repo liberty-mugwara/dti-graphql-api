@@ -1,15 +1,18 @@
-const { gql } = require('apollo-server-express');
-const { registrationTypes } = require('./schema/registration');
-const { authTypes } = require('./schema/auth');
-const { adminTypes } = require('./schema/admin');
-const { managerTypes } = require('./schema/manager');
-const { roleTypes } = require('./schema/role');
-const { studentTypes } = require('./schema/student');
-const { trainingOfficerTypes } = require('./schema/training-officer');
-const { tradeTypes } = require('./schema/trade');
-const { addressTypes } = require('./schema/address');
-const { nextOfKinTypes } = require('./schema/next-of-kin');
-const { userTypes } = require('./schema/user');
+const { gql } = require("apollo-server-express");
+const { registrationTypes } = require("./schema/registration");
+const { authTypes } = require("./schema/auth");
+const { adminTypes } = require("./schema/admin");
+const { managerTypes } = require("./schema/manager");
+const { roleTypes } = require("./schema/role");
+const { studentTypes } = require("./schema/student");
+const { trainingOfficerTypes } = require("./schema/training-officer");
+const { tradeTypes } = require("./schema/trade");
+const { addressTypes } = require("./schema/address");
+const { nextOfKinTypes } = require("./schema/next-of-kin");
+const { userTypes } = require("./schema/user");
+
+// for testing purposes
+const { exampleTypes } = require("./schema/public/example");
 
 // required
 const baseTypes = gql`
@@ -33,6 +36,7 @@ const baseTypes = gql`
     STAFF
     NOK
     ADDRESS
+    EXAMPLE
   }
 
   enum Title {
@@ -75,4 +79,7 @@ module.exports = [
   tradeTypes,
   nextOfKinTypes,
   userTypes,
+
+  // for testing purposes
+  exampleTypes,
 ];
