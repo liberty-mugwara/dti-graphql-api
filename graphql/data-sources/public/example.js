@@ -26,11 +26,10 @@ exports.Example = class extends MugsMongoDataSource {
   async update({ id, ...updateData } = {}) {
     const [_, updated] = await Promise.all([
       this.getRaw(id, { authorize: false }),
-      this.model.updateOne({ _id: id }, { ...updateData }),
+      this.model.findByIdAndUpdate(id, { ...updateData }),
     ]);
 
     this.cache.delete(this.getCacheKey(id));
-
     return updated;
   }
 };
